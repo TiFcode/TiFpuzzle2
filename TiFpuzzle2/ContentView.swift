@@ -24,9 +24,13 @@ struct ContentView: View {
     @State private var isAutoSolving = false
     @State private var gridFrame: CGRect?
     @State private var lowerAreaFrame: CGRect?
+    @State private var secretTaps: [Int] = []
+    @State private var showAutoSolveButton = false
+    @State private var animationSpeed: Double = 1.2
 
     let gridSize = 4
     let snapThreshold: CGFloat = 30.0
+    let secretSequence = [0, 12, 15, 3] // upper-left, lower-left, lower-right, upper-right
 
     var body: some View {
         GeometryReader { geometry in
@@ -42,36 +46,43 @@ struct ContentView: View {
                         Text("Solve the Puzzle!")
                             .font(.title2)
                             .fontWeight(.bold)
+                            .onTapGesture {
+                                if isAutoSolving {
+                                    animationSpeed = 0.3
+                                }
+                            }
 
                         Spacer()
 
-                        Button(action: {
-                            if isAutoSolving {
-                                stopAutoSolve()
-                            } else {
-                                if let gridFrame = gridFrame, let lowerAreaFrame = lowerAreaFrame {
-                                    autoSolvePuzzle(
-                                        gridFrame: gridFrame,
-                                        lowerAreaFrame: lowerAreaFrame,
-                                        cellSize: cellSize
-                                    )
+                        if showAutoSolveButton {
+                            Button(action: {
+                                if isAutoSolving {
+                                    stopAutoSolve()
+                                } else {
+                                    if let gridFrame = gridFrame, let lowerAreaFrame = lowerAreaFrame {
+                                        autoSolvePuzzle(
+                                            gridFrame: gridFrame,
+                                            lowerAreaFrame: lowerAreaFrame,
+                                            cellSize: cellSize
+                                        )
+                                    }
                                 }
+                            }) {
+                                Text(isAutoSolving ? "Stop Auto Solve" : "Auto Solve")
+                                    .font(.body)
+                                    .padding(.horizontal, 16)
+                                    .padding(.vertical, 8)
+                                    .background(isAutoSolving ? Color.red : Color.green)
+                                    .foregroundColor(.white)
+                                    .cornerRadius(8)
                             }
-                        }) {
-                            Text(isAutoSolving ? "Stop Auto Solve" : "Auto Solve")
-                                .font(.body)
-                                .padding(.horizontal, 16)
-                                .padding(.vertical, 8)
-                                .background(isAutoSolving ? Color.red : Color.green)
-                                .foregroundColor(.white)
-                                .cornerRadius(8)
                         }
                     }
                     .padding(.horizontal)
                     .padding(.bottom, 8)
 
                     ZStack {
-                        // Grid overlay
+                        // Grid overlay with tap detection
                         VStack(spacing: 0) {
                             ForEach(0..<gridSize, id: \.self) { row in
                                 HStack(spacing: 0) {
@@ -79,6 +90,10 @@ struct ContentView: View {
                                         Rectangle()
                                             .strokeBorder(Color.gray.opacity(0.5), lineWidth: 1)
                                             .frame(width: cellSize, height: cellSize)
+                                            .contentShape(Rectangle())
+                                            .onTapGesture {
+                                                handleSecretTap(row: row, col: col)
+                                            }
                                     }
                                 }
                             }
@@ -96,6 +111,7 @@ struct ContentView: View {
                                 gridSize: gridSize
                             )
                             .position(x: x, y: y)
+                            .allowsHitTesting(false)
                         }
                     }
                     .frame(width: squareSize, height: squareSize)
@@ -129,7 +145,7 @@ struct ContentView: View {
                                 .position(piece.position)
                                 .rotationEffect(.degrees(piece.rotation))
                                 .zIndex(piece.zIndex)
-                                .animation(.easeInOut(duration: 0.3), value: piece.position)
+                                .animation(.easeInOut(duration: animationSpeed), value: piece.position)
                                 .gesture(
                                     DragGesture(minimumDistance: 0)
                                         .onChanged { value in
@@ -202,6 +218,8 @@ struct ContentView: View {
 
     func resetPuzzle(containerWidth: CGFloat, containerHeight: CGFloat) {
         puzzleCompleted = false
+        showAutoSolveButton = false
+        secretTaps = []
         initializePuzzle(containerWidth: containerWidth, containerHeight: containerHeight)
     }
 
@@ -260,49 +278,70 @@ struct ContentView: View {
         isAutoSolving = false
     }
 
+    func handleSecretTap(row: Int, col: Int) {
+        let cellIndex = row * gridSize + col
+        secretTaps.append(cellIndex)
+
+        // Keep only the last 4 taps
+        if secretTaps.count > 4 {
+            secretTaps.removeFirst()
+        }
+
+        // Check if the sequence matches
+        if secretTaps == secretSequence {
+            withAnimation {
+                showAutoSolveButton.toggle()
+            }
+        }
+    }
+
     func autoSolvePuzzle(gridFrame: CGRect, lowerAreaFrame: CGRect, cellSize: CGFloat) {
         isAutoSolving = true
+        animationSpeed = 1.2
 
         // Get only pieces that are not yet placed
         let unplacedPieces = pieces.filter { !$0.isPlaced }
 
-        for (index, piece) in unplacedPieces.enumerated() {
-            let delay = Double(index) * 0.35
-
-            DispatchQueue.main.asyncAfter(deadline: .now() + delay) {
-                // Check if auto-solve was stopped
-                guard self.isAutoSolving else { return }
-
-                if let idx = self.pieces.firstIndex(where: { $0.id == piece.id }) {
-                    // Calculate target position in grid coordinates (global)
-                    let cellX = CGFloat(piece.col) * cellSize + cellSize / 2
-                    let cellY = CGFloat(piece.row) * cellSize + cellSize / 2
-                    let targetGlobalX = gridFrame.minX + cellX
-                    let targetGlobalY = gridFrame.minY + cellY
-
-                    // Convert to lower area coordinates (relative to lower ZStack)
-                    let targetLocalX = targetGlobalX - lowerAreaFrame.minX
-                    let targetLocalY = targetGlobalY - lowerAreaFrame.minY
-
-                    // Update position (animation handled by .animation modifier on view)
-                    self.pieces[idx].position = CGPoint(x: targetLocalX, y: targetLocalY)
-                    self.pieces[idx].rotation = 0
-
-                    // Mark as placed after animation completes
-                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
-                        guard self.isAutoSolving else { return }
-                        self.pieces[idx].isPlaced = true
-                    }
+        func solvePiece(at index: Int) {
+            guard index < unplacedPieces.count else {
+                DispatchQueue.main.asyncAfter(deadline: .now() + self.animationSpeed) {
+                    self.isAutoSolving = false
+                    self.checkPuzzleCompletion()
                 }
+                return
+            }
 
-                if index == unplacedPieces.count - 1 {
-                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.65) {
-                        self.isAutoSolving = false
-                        self.checkPuzzleCompletion()
-                    }
+            guard self.isAutoSolving else { return }
+
+            let piece = unplacedPieces[index]
+
+            if let idx = self.pieces.firstIndex(where: { $0.id == piece.id }) {
+                // Calculate target position in grid coordinates (global)
+                let cellX = CGFloat(piece.col) * cellSize + cellSize / 2
+                let cellY = CGFloat(piece.row) * cellSize + cellSize / 2
+                let targetGlobalX = gridFrame.minX + cellX
+                let targetGlobalY = gridFrame.minY + cellY
+
+                // Convert to lower area coordinates (relative to lower ZStack)
+                let targetLocalX = targetGlobalX - lowerAreaFrame.minX
+                let targetLocalY = targetGlobalY - lowerAreaFrame.minY
+
+                // Update position (animation handled by .animation modifier on view)
+                self.pieces[idx].position = CGPoint(x: targetLocalX, y: targetLocalY)
+                self.pieces[idx].rotation = 0
+
+                // Mark as placed after animation completes
+                DispatchQueue.main.asyncAfter(deadline: .now() + self.animationSpeed) {
+                    guard self.isAutoSolving else { return }
+                    self.pieces[idx].isPlaced = true
+
+                    // Solve next piece
+                    solvePiece(at: index + 1)
                 }
             }
         }
+
+        solvePiece(at: 0)
     }
 }
 

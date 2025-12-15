@@ -7,7 +7,7 @@ A fun and interactive puzzle game for iOS 15.0+ built with SwiftUI.
 - 4x4 puzzle grid in the upper area
 - Scattered pieces in the lower area (straight, not rotated)
 - Drag and drop with snap-to-grid when pieces are dropped close to their correct position
-- Auto Solve button with smooth animations (0.3s per piece)
+- Auto Solve button with smooth animations (1.2s per piece)
 - Stop Auto Solve functionality (button turns red and stops the animation)
 - Puzzle completion detection with "Play Again" option
 
