@@ -145,7 +145,7 @@ struct ContentView: View {
                                 .position(piece.position)
                                 .rotationEffect(.degrees(piece.rotation))
                                 .zIndex(piece.zIndex)
-                                .animation(.easeInOut(duration: animationSpeed), value: piece.position)
+                                .animation(isAutoSolving ? .easeInOut(duration: animationSpeed) : nil, value: piece.position)
                                 .gesture(
                                     DragGesture(minimumDistance: 0)
                                         .onChanged { value in
