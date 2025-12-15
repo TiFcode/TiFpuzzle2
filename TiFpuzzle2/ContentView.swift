@@ -7,15 +7,331 @@
 
 import SwiftUI
 
+struct PuzzlePiece: Identifiable {
+    let id: Int
+    let row: Int
+    let col: Int
+    var position: CGPoint
+    var rotation: Double
+    var isPlaced: Bool = false
+    var zIndex: Double = 0
+}
+
 struct ContentView: View {
+    @State private var pieces: [PuzzlePiece] = []
+    @State private var puzzleCompleted = false
+    @State private var draggedPiece: PuzzlePiece?
+    @State private var isAutoSolving = false
+    @State private var gridFrame: CGRect?
+    @State private var lowerAreaFrame: CGRect?
+
+    let gridSize = 4
+    let snapThreshold: CGFloat = 30.0
+
     var body: some View {
-        VStack {
-            Image(systemName: "globe")
-                .imageScale(.large)
-                .foregroundStyle(.tint)
-            Text("Hello, world!")
+        GeometryReader { geometry in
+            let availableHeight = geometry.size.height
+            let availableWidth = geometry.size.width
+            let squareSize = min(availableWidth, availableHeight * 0.45) - 32
+            let cellSize = squareSize / CGFloat(gridSize)
+
+            VStack(spacing: 16) {
+                // Upper part - Solved puzzle grid
+                VStack(spacing: 0) {
+                    HStack {
+                        Text("Solve the Puzzle!")
+                            .font(.title2)
+                            .fontWeight(.bold)
+
+                        Spacer()
+
+                        Button(action: {
+                            if isAutoSolving {
+                                stopAutoSolve()
+                            } else {
+                                if let gridFrame = gridFrame, let lowerAreaFrame = lowerAreaFrame {
+                                    autoSolvePuzzle(
+                                        gridFrame: gridFrame,
+                                        lowerAreaFrame: lowerAreaFrame,
+                                        cellSize: cellSize
+                                    )
+                                }
+                            }
+                        }) {
+                            Text(isAutoSolving ? "Stop Auto Solve" : "Auto Solve")
+                                .font(.body)
+                                .padding(.horizontal, 16)
+                                .padding(.vertical, 8)
+                                .background(isAutoSolving ? Color.red : Color.green)
+                                .foregroundColor(.white)
+                                .cornerRadius(8)
+                        }
+                    }
+                    .padding(.horizontal)
+                    .padding(.bottom, 8)
+
+                    ZStack {
+                        // Grid overlay
+                        VStack(spacing: 0) {
+                            ForEach(0..<gridSize, id: \.self) { row in
+                                HStack(spacing: 0) {
+                                    ForEach(0..<gridSize, id: \.self) { col in
+                                        Rectangle()
+                                            .strokeBorder(Color.gray.opacity(0.5), lineWidth: 1)
+                                            .frame(width: cellSize, height: cellSize)
+                                    }
+                                }
+                            }
+                        }
+                        .frame(width: squareSize, height: squareSize)
+
+                        // Placed pieces
+                        ForEach(pieces.filter { $0.isPlaced }) { piece in
+                            let x = CGFloat(piece.col) * cellSize + cellSize / 2
+                            let y = CGFloat(piece.row) * cellSize + cellSize / 2
+
+                            PuzzlePieceView(
+                                piece: piece,
+                                cellSize: cellSize,
+                                gridSize: gridSize
+                            )
+                            .position(x: x, y: y)
+                        }
+                    }
+                    .frame(width: squareSize, height: squareSize)
+                    .background(
+                        GeometryReader { gridGeo in
+                            Color.white
+                                .onAppear {
+                                    gridFrame = gridGeo.frame(in: .global)
+                                }
+                                .onChange(of: gridGeo.frame(in: .global)) { newFrame in
+                                    gridFrame = newFrame
+                                }
+                        }
+                    )
+                    .cornerRadius(12)
+                    .shadow(radius: 4)
+                }
+                .padding()
+
+                // Lower part - Scattered puzzle pieces
+                GeometryReader { lowerGeo in
+                    ZStack {
+                        ForEach(pieces) { piece in
+                            if !piece.isPlaced {
+                                PuzzlePieceView(
+                                    piece: piece,
+                                    cellSize: cellSize,
+                                    gridSize: gridSize
+                                )
+                                .contentShape(Rectangle())
+                                .position(piece.position)
+                                .rotationEffect(.degrees(piece.rotation))
+                                .zIndex(piece.zIndex)
+                                .animation(.easeInOut(duration: 0.3), value: piece.position)
+                                .gesture(
+                                    DragGesture(minimumDistance: 0)
+                                        .onChanged { value in
+                                            if let index = pieces.firstIndex(where: { $0.id == piece.id }) {
+                                                // Bring to front when dragging
+                                                let maxZ = pieces.map { $0.zIndex }.max() ?? 0
+                                                pieces[index].zIndex = maxZ + 1
+                                                pieces[index].position = value.location
+                                            }
+                                        }
+                                        .onEnded { value in
+                                            if let gridFrame = gridFrame, let lowerAreaFrame = lowerAreaFrame {
+                                                handleDrop(
+                                                    piece: piece,
+                                                    location: value.location,
+                                                    gridFrame: gridFrame,
+                                                    lowerAreaFrame: lowerAreaFrame,
+                                                    cellSize: cellSize
+                                                )
+                                            }
+                                        }
+                                )
+                                .disabled(isAutoSolving)
+                            }
+                        }
+                    }
+                    .frame(maxWidth: .infinity, maxHeight: .infinity)
+                    .background(Color.blue.opacity(0.1))
+                    .onAppear {
+                        lowerAreaFrame = lowerGeo.frame(in: .global)
+                    }
+                    .onChange(of: lowerGeo.frame(in: .global)) { newFrame in
+                        lowerAreaFrame = newFrame
+                    }
+                }
+            }
+            .onAppear {
+                initializePuzzle(containerWidth: availableWidth, containerHeight: availableHeight * 0.5)
+            }
+            .alert("Puzzle Completed!", isPresented: $puzzleCompleted) {
+                Button("Play Again") {
+                    resetPuzzle(containerWidth: availableWidth, containerHeight: availableHeight * 0.5)
+                }
+            } message: {
+                Text("Great job! You solved the puzzle!")
+            }
         }
-        .padding()
+    }
+
+    func initializePuzzle(containerWidth: CGFloat, containerHeight: CGFloat) {
+        pieces = []
+
+        for row in 0..<gridSize {
+            for col in 0..<gridSize {
+                let randomX = CGFloat.random(in: 50...(containerWidth - 50))
+                let randomY = CGFloat.random(in: 50...(containerHeight - 50))
+
+                let piece = PuzzlePiece(
+                    id: row * gridSize + col,
+                    row: row,
+                    col: col,
+                    position: CGPoint(x: randomX, y: randomY),
+                    rotation: 0,
+                    isPlaced: false
+                )
+                pieces.append(piece)
+            }
+        }
+    }
+
+    func resetPuzzle(containerWidth: CGFloat, containerHeight: CGFloat) {
+        puzzleCompleted = false
+        initializePuzzle(containerWidth: containerWidth, containerHeight: containerHeight)
+    }
+
+    func handleDrop(piece: PuzzlePiece, location: CGPoint, gridFrame: CGRect, lowerAreaFrame: CGRect, cellSize: CGFloat) {
+        guard let index = pieces.firstIndex(where: { $0.id == piece.id }) else { return }
+
+        // Convert location from lower area coordinates to global coordinates
+        let globalX = location.x + lowerAreaFrame.minX
+        let globalY = location.y + lowerAreaFrame.minY
+
+        // Convert global coordinates to grid coordinates
+        let gridX = globalX - gridFrame.minX
+        let gridY = globalY - gridFrame.minY
+
+        // Check if dropped within the grid area
+        if gridX >= 0 && gridX <= gridFrame.width && gridY >= 0 && gridY <= gridFrame.height {
+            // Calculate which cell was targeted
+            let targetCol = Int(gridX / cellSize)
+            let targetRow = Int(gridY / cellSize)
+
+            // Check if it's the correct cell
+            if targetRow == piece.row && targetCol == piece.col {
+                // Calculate center of correct cell
+                let cellCenterX = CGFloat(targetCol) * cellSize + cellSize / 2
+                let cellCenterY = CGFloat(targetRow) * cellSize + cellSize / 2
+
+                let dropX = gridX
+                let dropY = gridY
+
+                // Check if within snap threshold
+                let distance = sqrt(pow(dropX - cellCenterX, 2) + pow(dropY - cellCenterY, 2))
+
+                if distance <= snapThreshold {
+                    // Snap to correct position with animation
+                    withAnimation(.spring(response: 0.3, dampingFraction: 0.6)) {
+                        pieces[index].isPlaced = true
+                        pieces[index].rotation = 0
+                    }
+
+                    // Check if puzzle is completed
+                    checkPuzzleCompletion()
+                }
+            }
+        }
+    }
+
+    func checkPuzzleCompletion() {
+        if pieces.allSatisfy({ $0.isPlaced }) {
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                puzzleCompleted = true
+            }
+        }
+    }
+
+    func stopAutoSolve() {
+        isAutoSolving = false
+    }
+
+    func autoSolvePuzzle(gridFrame: CGRect, lowerAreaFrame: CGRect, cellSize: CGFloat) {
+        isAutoSolving = true
+
+        // Get only pieces that are not yet placed
+        let unplacedPieces = pieces.filter { !$0.isPlaced }
+
+        for (index, piece) in unplacedPieces.enumerated() {
+            let delay = Double(index) * 0.35
+
+            DispatchQueue.main.asyncAfter(deadline: .now() + delay) {
+                // Check if auto-solve was stopped
+                guard self.isAutoSolving else { return }
+
+                if let idx = self.pieces.firstIndex(where: { $0.id == piece.id }) {
+                    // Calculate target position in grid coordinates (global)
+                    let cellX = CGFloat(piece.col) * cellSize + cellSize / 2
+                    let cellY = CGFloat(piece.row) * cellSize + cellSize / 2
+                    let targetGlobalX = gridFrame.minX + cellX
+                    let targetGlobalY = gridFrame.minY + cellY
+
+                    // Convert to lower area coordinates (relative to lower ZStack)
+                    let targetLocalX = targetGlobalX - lowerAreaFrame.minX
+                    let targetLocalY = targetGlobalY - lowerAreaFrame.minY
+
+                    // Update position (animation handled by .animation modifier on view)
+                    self.pieces[idx].position = CGPoint(x: targetLocalX, y: targetLocalY)
+                    self.pieces[idx].rotation = 0
+
+                    // Mark as placed after animation completes
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+                        guard self.isAutoSolving else { return }
+                        self.pieces[idx].isPlaced = true
+                    }
+                }
+
+                if index == unplacedPieces.count - 1 {
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.65) {
+                        self.isAutoSolving = false
+                        self.checkPuzzleCompletion()
+                    }
+                }
+            }
+        }
+    }
+}
+
+struct PuzzlePieceView: View {
+    let piece: PuzzlePiece
+    let cellSize: CGFloat
+    let gridSize: Int
+
+    var body: some View {
+        GeometryReader { geometry in
+            let totalSize = cellSize * CGFloat(gridSize)
+
+            Image("puzzle")
+                .resizable()
+                .scaledToFill()
+                .frame(width: totalSize, height: totalSize)
+                .clipped()
+                .offset(
+                    x: -CGFloat(piece.col) * cellSize,
+                    y: -CGFloat(piece.row) * cellSize
+                )
+        }
+        .frame(width: cellSize, height: cellSize)
+        .clipped()
+        .overlay(
+            Rectangle()
+                .strokeBorder(Color.white, lineWidth: 2)
+        )
+        .shadow(radius: piece.isPlaced ? 0 : 3)
     }
 }
 
