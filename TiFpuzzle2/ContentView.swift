@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import PhotosUI
 
 struct PuzzlePiece: Identifiable {
     let id: Int
@@ -27,6 +28,9 @@ struct ContentView: View {
     @State private var secretTaps: [Int] = []
     @State private var showAutoSolveButton = false
     @State private var animationSpeed: Double = 1.2
+    @State private var selectedImage: PhotosPickerItem?
+    @State private var puzzleImage: UIImage?
+    @State private var showPhotoPicker = false
 
     let gridSize = 4
     let snapThreshold: CGFloat = 30.0
@@ -43,7 +47,21 @@ struct ContentView: View {
                 // Upper part - Solved puzzle grid
                 VStack(spacing: 0) {
                     HStack {
-                        Text("Solve the Puzzle!")
+                        PhotosPicker(selection: $selectedImage, matching: .images) {
+                            HStack {
+                                Image(systemName: "photo")
+                                    .font(.body)
+                                Text("Load photo")
+                                    .font(.body)
+                            }
+                            .padding(.horizontal, 12)
+                            .padding(.vertical, 6)
+                            .background(Color.blue.opacity(0.1))
+                            .foregroundColor(.blue)
+                            .cornerRadius(8)
+                        }
+
+                        Text("TiFpuzzle2")
                             .font(.title2)
                             .fontWeight(.bold)
                             .onTapGesture {
@@ -108,7 +126,8 @@ struct ContentView: View {
                             PuzzlePieceView(
                                 piece: piece,
                                 cellSize: cellSize,
-                                gridSize: gridSize
+                                gridSize: gridSize,
+                                image: puzzleImage
                             )
                             .position(x: x, y: y)
                             .allowsHitTesting(false)
@@ -139,7 +158,8 @@ struct ContentView: View {
                                 PuzzlePieceView(
                                     piece: piece,
                                     cellSize: cellSize,
-                                    gridSize: gridSize
+                                    gridSize: gridSize,
+                                    image: puzzleImage
                                 )
                                 .contentShape(Rectangle())
                                 .position(piece.position)
@@ -184,6 +204,15 @@ struct ContentView: View {
             }
             .onAppear {
                 initializePuzzle(containerWidth: availableWidth, containerHeight: availableHeight * 0.5)
+            }
+            .onChange(of: selectedImage) { newItem in
+                Task {
+                    if let data = try? await newItem?.loadTransferable(type: Data.self),
+                       let image = UIImage(data: data) {
+                        puzzleImage = image
+                        resetPuzzle(containerWidth: availableWidth, containerHeight: availableHeight * 0.5)
+                    }
+                }
             }
             .alert("Puzzle Completed!", isPresented: $puzzleCompleted) {
                 Button("Play Again") {
@@ -349,20 +378,35 @@ struct PuzzlePieceView: View {
     let piece: PuzzlePiece
     let cellSize: CGFloat
     let gridSize: Int
+    let image: UIImage?
 
     var body: some View {
         GeometryReader { geometry in
             let totalSize = cellSize * CGFloat(gridSize)
 
-            Image("puzzle")
-                .resizable()
-                .scaledToFill()
-                .frame(width: totalSize, height: totalSize)
-                .clipped()
-                .offset(
-                    x: -CGFloat(piece.col) * cellSize,
-                    y: -CGFloat(piece.row) * cellSize
-                )
+            Group {
+                if let uiImage = image {
+                    Image(uiImage: uiImage)
+                        .resizable()
+                        .scaledToFill()
+                        .frame(width: totalSize, height: totalSize)
+                        .clipped()
+                        .offset(
+                            x: -CGFloat(piece.col) * cellSize,
+                            y: -CGFloat(piece.row) * cellSize
+                        )
+                } else {
+                    Image("puzzle")
+                        .resizable()
+                        .scaledToFill()
+                        .frame(width: totalSize, height: totalSize)
+                        .clipped()
+                        .offset(
+                            x: -CGFloat(piece.col) * cellSize,
+                            y: -CGFloat(piece.row) * cellSize
+                        )
+                }
+            }
         }
         .frame(width: cellSize, height: cellSize)
         .clipped()
