@@ -31,6 +31,7 @@ struct ContentView: View {
     @State private var selectedImage: PhotosPickerItem?
     @State private var puzzleImage: UIImage?
     @State private var showPhotoPicker = false
+    @State private var menuAreaMaxY: CGFloat = 0
 
     let gridSize = 4
     let snapThreshold: CGFloat = 30.0
@@ -98,6 +99,17 @@ struct ContentView: View {
                     }
                     .padding(.horizontal)
                     .padding(.bottom, 8)
+                    .background(
+                        GeometryReader { menuGeo in
+                            Color.clear
+                                .onAppear {
+                                    menuAreaMaxY = menuGeo.frame(in: .global).maxY
+                                }
+                                .onChange(of: menuGeo.frame(in: .global)) { newFrame in
+                                    menuAreaMaxY = newFrame.maxY
+                                }
+                        }
+                    )
 
                     ZStack {
                         // Grid overlay with tap detection
@@ -173,7 +185,23 @@ struct ContentView: View {
                                                 // Bring to front when dragging
                                                 let maxZ = pieces.map { $0.zIndex }.max() ?? 0
                                                 pieces[index].zIndex = maxZ + 1
-                                                pieces[index].position = value.location
+
+                                                // Calculate minimum Y position so the top of the piece doesn't go above menu
+                                                // Position is at center of piece, so we need to add half the cellSize
+                                                let minLocalY = menuAreaMaxY - lowerAreaFrame!.minY + (cellSize / 2)
+
+                                                // Calculate maximum Y position (1 cm = ~37.8 points from bottom)
+                                                // Bottom of piece shouldn't go below lowerArea height - 37.8 points
+                                                let bottomMargin: CGFloat = 37.8
+                                                let maxLocalY = lowerAreaFrame!.height - bottomMargin - (cellSize / 2)
+
+                                                // Clamp the position to prevent the piece from going above menu or below bottom margin
+                                                let clampedLocalY = min(max(value.location.y, minLocalY), maxLocalY)
+
+                                                pieces[index].position = CGPoint(
+                                                    x: value.location.x,
+                                                    y: clampedLocalY
+                                                )
                                             }
                                         }
                                         .onEnded { value in
