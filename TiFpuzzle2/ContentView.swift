@@ -63,9 +63,9 @@ struct ContentView: View {
                             .cornerRadius(8)
                         }
 
-                        Text("TiFpuzzle2")
-                            .font(.title2)
-                            .fontWeight(.bold)
+                        Text("TiFpuzzle")
+                            .font(.system(.title3, design: .rounded))
+                            .fontWeight(.regular)
                             .onTapGesture {
                                 if isAutoSolving {
                                     animationSpeed = 0.3
