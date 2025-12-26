@@ -4,29 +4,33 @@ A fun and interactive puzzle game for iOS 15.0+ built with SwiftUI.
 
 ## Features
 
-- 4x4 puzzle grid in the upper area
-- Load any photo from your device using the photo picker
-- Scattered pieces in the lower area (straight, not rotated)
-- Drag and drop with snap-to-grid when pieces are dropped close to their correct position
-- Secret combination to unlock Auto Solve button
-- Auto Solve button with smooth animations (1.2s per piece)
-- Tap "TiFpuzzle2" during auto-solve to accelerate to 0.3s per piece
-- Stop Auto Solve functionality (button turns red and stops the animation)
-- Puzzle completion detection with "Play Again" option
+- **Switchable grid modes**: 3x3 (default) or 4x4 puzzle grid - tap the title to toggle
+- **Custom photos**: Load any photo from your device using the photo picker
+- **Smart piece placement**: Scattered pieces in the lower area (straight, not rotated)
+- **Snap-to-grid**: Pieces automatically snap when dropped close to their correct position
+- **Drag boundaries**: Pieces can't be dragged above the menu or below 1cm from bottom
+- **Orientation handling**: Unplaced pieces shuffle when device is rotated
+- **Secret combination**: Unlock Auto Solve button by tapping grid corners in sequence
+- **Auto Solve**: Watch the puzzle solve itself with smooth animations (1.2s per piece)
+- **Speed control**: Tap the title during auto-solve to accelerate to 0.3s per piece
+- **Stop Auto Solve**: Red button to pause automatic solving at any time
+- **Completion detection**: "Play Again" option when puzzle is completed
 
 ## How to Play
 
-1. Launch the app to see the puzzle grid at the top and scattered pieces at the bottom
-2. Tap the photo icon to load any image from your device (optional - defaults to built-in "puzzle" image)
-3. Drag puzzle pieces from the bottom area to their correct positions in the top grid
-4. When a piece is dropped close to its correct position, it will automatically snap into place
-5. Complete the entire puzzle to see a completion message
-6. To unlock the Auto Solve button, tap the grid corners in this order:
+1. **Launch**: App starts with a 3x3 puzzle grid at the top and scattered pieces at the bottom
+2. **Load photo** (optional): Tap "Load photo" button to use any image from your device
+3. **Switch difficulty**: Tap the title (e.g., "TiFpuzzle 3x3") to toggle between 3x3 and 4x4 modes
+4. **Drag pieces**: Drag puzzle pieces from the bottom area to their correct positions in the top grid
+5. **Snap to grid**: When a piece is dropped close to its correct position, it automatically snaps into place
+6. **Complete puzzle**: Solve all pieces to see the completion message
+7. **Unlock Auto Solve**: Tap the grid corners in this order to reveal the Auto Solve button:
    - Upper-left corner → Lower-left corner → Lower-right corner → Upper-right corner
-7. Use the "Auto Solve" button to watch the puzzle solve itself with smooth animations
-8. During auto-solve, tap "TiFpuzzle2" to speed up the animation
-9. Press "Stop Auto Solve" (red button) to pause the automatic solving at any time
-10. After completing the puzzle, press "Play Again" to shuffle and start over
+   - (Tap same sequence again to hide the button)
+8. **Auto Solve**: Press the green "Auto Solve" button to watch the puzzle solve itself
+9. **Speed up**: During auto-solve, tap the title to accelerate animation from 1.2s to 0.3s per piece
+10. **Stop**: Press the red "Stop Auto Solve" button to pause automatic solving
+11. **Play Again**: After completion, press "Play Again" to shuffle and start over
 
 ## Requirements
 
