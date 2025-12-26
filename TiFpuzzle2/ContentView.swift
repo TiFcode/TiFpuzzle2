@@ -32,7 +32,7 @@ struct ContentView: View {
     @State private var puzzleImage: UIImage?
     @State private var showPhotoPicker = false
     @State private var menuAreaMaxY: CGFloat = 0
-    @State private var gridSize = 4
+    @State private var gridSize = 3
     @State private var previousSize: CGSize = .zero
 
     let snapThreshold: CGFloat = 30.0
