@@ -294,10 +294,19 @@ struct ContentView: View {
     func initializePuzzle(containerWidth: CGFloat, containerHeight: CGFloat) {
         pieces = []
 
+        let cellSize = min(containerWidth, containerHeight * 0.9) / CGFloat(gridSize)
+        let bottomMargin: CGFloat = 37.8
+
+        // Calculate valid ranges for initial placement
+        let minX = cellSize / 2
+        let maxX = containerWidth - cellSize / 2
+        let minY = cellSize / 2
+        let maxY = containerHeight - bottomMargin - (cellSize / 2)
+
         for row in 0..<gridSize {
             for col in 0..<gridSize {
-                let randomX = CGFloat.random(in: 50...(containerWidth - 50))
-                let randomY = CGFloat.random(in: 50...(containerHeight - 50))
+                let randomX = CGFloat.random(in: minX...maxX)
+                let randomY = CGFloat.random(in: minY...maxY)
 
                 let piece = PuzzlePiece(
                     id: row * gridSize + col,
