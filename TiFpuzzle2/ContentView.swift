@@ -238,7 +238,6 @@ struct ContentView: View {
                         }
                     }
                     .frame(maxWidth: .infinity, maxHeight: .infinity)
-                    .background(Color.blue.opacity(0.1))
                     .onAppear {
                         lowerAreaFrame = lowerGeo.frame(in: .global)
                     }
