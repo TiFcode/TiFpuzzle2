@@ -5,6 +5,7 @@ A fun and interactive puzzle game for iOS 15.0+ built with SwiftUI.
 ## Features
 
 - **Switchable grid modes**: 3x3 (default) or 4x4 puzzle grid - tap the title to toggle
+- **Camera support**: Take photos directly with the camera button to create instant puzzles
 - **Custom photos**: Load any photo from your device using the photo picker
 - **Smart piece placement**: Scattered pieces in the lower area (straight, not rotated)
 - **Snap-to-grid**: Pieces automatically snap when dropped close to their correct position
@@ -19,7 +20,9 @@ A fun and interactive puzzle game for iOS 15.0+ built with SwiftUI.
 ## How to Play
 
 1. **Launch**: App starts with a 3x3 puzzle grid at the top and scattered pieces at the bottom
-2. **Load photo** (optional): Tap "Load photo" button to use any image from your device
+2. **Load photo** (optional):
+   - Tap the camera icon to take a photo directly with your device camera
+   - Or tap "Load photo" button to choose any image from your photo library
 3. **Switch difficulty**: Tap the title (e.g., "TiFpuzzle 3x3") to toggle between 3x3 and 4x4 modes
 4. **Drag pieces**: Drag puzzle pieces from the bottom area to their correct positions in the top grid
 5. **Snap to grid**: When a piece is dropped close to its correct position, it automatically snaps into place
