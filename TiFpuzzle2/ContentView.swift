@@ -32,11 +32,13 @@ struct ContentView: View {
     @State private var puzzleImage: UIImage?
     @State private var showPhotoPicker = false
     @State private var menuAreaMaxY: CGFloat = 0
-    @State private var lastOrientation: UIDeviceOrientation = UIDevice.current.orientation
+    @State private var gridSize = 4
+    @State private var previousSize: CGSize = .zero
 
-    let gridSize = 4
     let snapThreshold: CGFloat = 30.0
-    let secretSequence = [0, 12, 15, 3] // upper-left, lower-left, lower-right, upper-right
+    var secretSequence: [Int] {
+        gridSize == 4 ? [0, 12, 15, 3] : [0, 6, 8, 2]
+    }
 
     var body: some View {
         GeometryReader { geometry in
@@ -63,12 +65,14 @@ struct ContentView: View {
                             .cornerRadius(8)
                         }
 
-                        Text("TiFpuzzle")
+                        Text("TiFpuzzle \(gridSize)x\(gridSize)")
                             .font(.system(.title3, design: .rounded))
                             .fontWeight(.regular)
                             .onTapGesture {
                                 if isAutoSolving {
                                     animationSpeed = 0.3
+                                } else {
+                                    toggleGridSize(containerWidth: availableWidth, containerHeight: availableHeight * 0.5)
                                 }
                             }
 
@@ -233,21 +237,21 @@ struct ContentView: View {
             }
             .onAppear {
                 initializePuzzle(containerWidth: availableWidth, containerHeight: availableHeight * 0.5)
-                lastOrientation = UIDevice.current.orientation
+                previousSize = geometry.size
             }
             .onChange(of: geometry.size) { newSize in
-                let currentOrientation = UIDevice.current.orientation
+                // Check if the aspect ratio changed (orientation change)
+                // Portrait: width < height, Landscape: width > height
+                if previousSize != .zero {
+                    let wasPortrait = previousSize.height > previousSize.width
+                    let isPortrait = newSize.height > newSize.width
 
-                // Check if orientation changed from portrait to landscape or vice versa
-                let wasPortrait = lastOrientation.isPortrait
-                let wasLandscape = lastOrientation.isLandscape
-                let isPortrait = currentOrientation.isPortrait
-                let isLandscape = currentOrientation.isLandscape
-
-                if (wasPortrait && isLandscape) || (wasLandscape && isPortrait) {
-                    shuffleUnplacedPieces(containerWidth: newSize.width, containerHeight: newSize.height * 0.5)
-                    lastOrientation = currentOrientation
+                    // If orientation changed, shuffle unplaced pieces
+                    if wasPortrait != isPortrait {
+                        shuffleUnplacedPieces(containerWidth: newSize.width, containerHeight: newSize.height * 0.5)
+                    }
                 }
+                previousSize = newSize
             }
             .onChange(of: selectedImage) { newItem in
                 Task {
@@ -297,13 +301,28 @@ struct ContentView: View {
     }
 
     func shuffleUnplacedPieces(containerWidth: CGFloat, containerHeight: CGFloat) {
+        guard let lowerAreaFrame = lowerAreaFrame else { return }
+
+        let cellSize = min(containerWidth, containerHeight * 0.9) / CGFloat(gridSize)
+        let bottomMargin: CGFloat = 37.8
+
+        // Calculate valid Y range accounting for menu and bottom margins
+        // The lower area starts at y=0 locally, so minY should just account for piece size
+        let minY = cellSize / 2
+        let maxY = lowerAreaFrame.height - bottomMargin - (cellSize / 2)
+
         for index in pieces.indices {
             if !pieces[index].isPlaced {
-                let randomX = CGFloat.random(in: 50...(containerWidth - 50))
-                let randomY = CGFloat.random(in: 50...(containerHeight - 50))
+                let randomX = CGFloat.random(in: (cellSize / 2)...(containerWidth - cellSize / 2))
+                let randomY = CGFloat.random(in: minY...maxY)
                 pieces[index].position = CGPoint(x: randomX, y: randomY)
             }
         }
+    }
+
+    func toggleGridSize(containerWidth: CGFloat, containerHeight: CGFloat) {
+        gridSize = gridSize == 4 ? 3 : 4
+        resetPuzzle(containerWidth: containerWidth, containerHeight: containerHeight)
     }
 
     func handleDrop(piece: PuzzlePiece, location: CGPoint, gridFrame: CGRect, lowerAreaFrame: CGRect, cellSize: CGFloat) {
