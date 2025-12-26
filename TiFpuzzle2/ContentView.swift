@@ -32,6 +32,7 @@ struct ContentView: View {
     @State private var puzzleImage: UIImage?
     @State private var showPhotoPicker = false
     @State private var menuAreaMaxY: CGFloat = 0
+    @State private var lastOrientation: UIDeviceOrientation = UIDevice.current.orientation
 
     let gridSize = 4
     let snapThreshold: CGFloat = 30.0
@@ -232,6 +233,21 @@ struct ContentView: View {
             }
             .onAppear {
                 initializePuzzle(containerWidth: availableWidth, containerHeight: availableHeight * 0.5)
+                lastOrientation = UIDevice.current.orientation
+            }
+            .onChange(of: geometry.size) { newSize in
+                let currentOrientation = UIDevice.current.orientation
+
+                // Check if orientation changed from portrait to landscape or vice versa
+                let wasPortrait = lastOrientation.isPortrait
+                let wasLandscape = lastOrientation.isLandscape
+                let isPortrait = currentOrientation.isPortrait
+                let isLandscape = currentOrientation.isLandscape
+
+                if (wasPortrait && isLandscape) || (wasLandscape && isPortrait) {
+                    shuffleUnplacedPieces(containerWidth: newSize.width, containerHeight: newSize.height * 0.5)
+                    lastOrientation = currentOrientation
+                }
             }
             .onChange(of: selectedImage) { newItem in
                 Task {
@@ -278,6 +294,16 @@ struct ContentView: View {
         showAutoSolveButton = false
         secretTaps = []
         initializePuzzle(containerWidth: containerWidth, containerHeight: containerHeight)
+    }
+
+    func shuffleUnplacedPieces(containerWidth: CGFloat, containerHeight: CGFloat) {
+        for index in pieces.indices {
+            if !pieces[index].isPlaced {
+                let randomX = CGFloat.random(in: 50...(containerWidth - 50))
+                let randomY = CGFloat.random(in: 50...(containerHeight - 50))
+                pieces[index].position = CGPoint(x: randomX, y: randomY)
+            }
+        }
     }
 
     func handleDrop(piece: PuzzlePiece, location: CGPoint, gridFrame: CGRect, lowerAreaFrame: CGRect, cellSize: CGFloat) {
