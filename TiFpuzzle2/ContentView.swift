@@ -31,6 +31,7 @@ struct ContentView: View {
     @State private var selectedImage: PhotosPickerItem?
     @State private var puzzleImage: UIImage?
     @State private var showPhotoPicker = false
+    @State private var showCamera = false
     @State private var menuAreaMaxY: CGFloat = 0
     @State private var gridSize = 3
     @State private var previousSize: CGSize = .zero
@@ -51,6 +52,17 @@ struct ContentView: View {
                 // Upper part - Solved puzzle grid
                 VStack(spacing: 0) {
                     HStack {
+                        Button(action: {
+                            showCamera = true
+                        }) {
+                            Image(systemName: "camera.fill")
+                                .font(.title2)
+                                .foregroundColor(.blue)
+                                .padding(8)
+                                .background(Color.blue.opacity(0.1))
+                                .cornerRadius(8)
+                        }
+
                         PhotosPicker(selection: $selectedImage, matching: .images) {
                             HStack {
                                 Image(systemName: "photo")
@@ -268,6 +280,13 @@ struct ContentView: View {
                 }
             } message: {
                 Text("Great job! You solved the puzzle!")
+            }
+            .sheet(isPresented: $showCamera) {
+                ImagePicker(image: $puzzleImage, sourceType: .camera) { image in
+                    if image != nil {
+                        resetPuzzle(containerWidth: availableWidth, containerHeight: availableHeight * 0.5)
+                    }
+                }
             }
         }
     }
@@ -488,6 +507,46 @@ struct PuzzlePieceView: View {
                 .strokeBorder(Color.white, lineWidth: 2)
         )
         .shadow(radius: piece.isPlaced ? 0 : 3)
+    }
+}
+
+struct ImagePicker: UIViewControllerRepresentable {
+    @Binding var image: UIImage?
+    @Environment(\.presentationMode) var presentationMode
+    var sourceType: UIImagePickerController.SourceType
+    var onImagePicked: (UIImage?) -> Void
+
+    func makeUIViewController(context: Context) -> UIImagePickerController {
+        let picker = UIImagePickerController()
+        picker.sourceType = sourceType
+        picker.delegate = context.coordinator
+        return picker
+    }
+
+    func updateUIViewController(_ uiViewController: UIImagePickerController, context: Context) {}
+
+    func makeCoordinator() -> Coordinator {
+        Coordinator(self)
+    }
+
+    class Coordinator: NSObject, UINavigationControllerDelegate, UIImagePickerControllerDelegate {
+        let parent: ImagePicker
+
+        init(_ parent: ImagePicker) {
+            self.parent = parent
+        }
+
+        func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey: Any]) {
+            if let uiImage = info[.originalImage] as? UIImage {
+                parent.image = uiImage
+                parent.onImagePicked(uiImage)
+            }
+            parent.presentationMode.wrappedValue.dismiss()
+        }
+
+        func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
+            parent.presentationMode.wrappedValue.dismiss()
+        }
     }
 }
 
