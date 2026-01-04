@@ -63,4 +63,14 @@ For information about how this app handles your data, please see our [Privacy Po
 
 ## License
 
-The source code of the project "TiFpuzzle for Kids" located at (https://github.com/TiFcode/TiFpuzzle2) is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+The source code of the project "TiFpuzzle for Kids" located at [https://github.com/TiFcode/TiFpuzzle2](https://github.com/TiFcode/TiFpuzzle2) is licensed under the Apache License 2.0 - see the [LICENSE](LICENSE) file for details.
+
+### Attribution Requirements
+
+If you use this code in your project, you **MUST**:
+- ✅ Include the LICENSE and NOTICE files in your distribution
+- ✅ Provide proper attribution mentioning "TiFpuzzle for Kids by Iulian-Florin Toma"
+- ✅ Link back to this repository: https://github.com/TiFcode/TiFpuzzle2
+- ✅ State any modifications you made to the original files
+
+See the [NOTICE](NOTICE) file for complete attribution requirements.

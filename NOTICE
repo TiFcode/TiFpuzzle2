@@ -1,0 +1,47 @@
+TiFpuzzle for Kids
+Copyright 2026 Iulian-Florin Toma
+
+This product includes software developed at
+GitHub Repository: https://github.com/TiFcode/TiFpuzzle2
+
+================================================================================
+
+ATTRIBUTION REQUIREMENTS
+
+If you use, modify, or distribute this software or derivative works based on
+this software, you MUST:
+
+1. Retain this NOTICE file in all distributions
+2. Include the Apache License 2.0 (see LICENSE file)
+3. Clearly state any modifications you made to the original files
+4. Provide attribution to the original project in one of the following ways:
+
+   IN YOUR APPLICATION/DOCUMENTATION:
+   - Include a credits/about section mentioning:
+     "Based on TiFpuzzle for Kids by Iulian-Florin Toma"
+     "Original project: https://github.com/TiFcode/TiFpuzzle2"
+
+   IN YOUR SOURCE CODE:
+   - Retain all copyright notices in source files
+   - Include this NOTICE file in your distribution
+
+   IN DERIVATIVE WORKS:
+   - Clearly indicate this is a derivative work based on TiFpuzzle for Kids
+   - Link to the original project: https://github.com/TiFcode/TiFpuzzle2
+
+RECOMMENDED (but not required):
+- Star the original GitHub repository
+- Link back to the project in your README or documentation
+- Mention the original project when sharing your derivative work
+
+================================================================================
+
+PROJECT INFORMATION
+
+Name: TiFpuzzle for Kids
+Description: A fun and interactive puzzle game for iOS built with SwiftUI
+Repository: https://github.com/TiFcode/TiFpuzzle2
+Author: Iulian-Florin Toma
+License: Apache License 2.0
+
+================================================================================
