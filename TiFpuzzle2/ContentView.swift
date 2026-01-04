@@ -115,7 +115,20 @@ struct ContentView: View {
                         }
 
                         Button(action: {
-                            if let url = URL(string: "https://github.com/TiFcode/TiFpuzzle2") {
+                            if let url = URL(string: "https://tifcode.github.io/TiFpuzzle2") {
+                                UIApplication.shared.open(url)
+                            }
+                        }) {
+                            Image(systemName: "questionmark.circle")
+                                .font(.title2)
+                                .foregroundColor(.blue)
+                                .padding(8)
+                                .background(Color.blue.opacity(0.1))
+                                .cornerRadius(8)
+                        }
+
+                        Button(action: {
+                            if let url = URL(string: "https://tifcode.github.io/TiFpuzzle2/privacy-policy.html") {
                                 UIApplication.shared.open(url)
                             }
                         }) {
