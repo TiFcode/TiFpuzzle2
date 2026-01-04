@@ -56,3 +56,7 @@ A fun and interactive puzzle game for iOS 15.0+ built with SwiftUI.
 - Implements coordinate space conversions for accurate positioning
 - Features smooth animations with spring physics
 - Supports dynamic layout with GeometryReader
+
+## Privacy
+
+For information about how this app handles your data, please see our [Privacy Policy](privacy-policy.html).
