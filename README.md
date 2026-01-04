@@ -68,9 +68,9 @@ The source code of the project "TiFpuzzle for Kids" located at [https://github.c
 ### Attribution Requirements
 
 If you use this code in your project, you **MUST**:
-- ✅ Include the [https://tifcode.github.io/TiFpuzzle2/LICENSE.html](LICENSE.html) and [https://tifcode.github.io/TiFpuzzle2/NOTICE.html](NOTICE.html) files in your distribution
+- ✅ Include the [LICENSE.html](https://tifcode.github.io/TiFpuzzle2/LICENSE.html) and [NOTICE.html](https://tifcode.github.io/TiFpuzzle2/NOTICE.html) files in your distribution
 - ✅ Provide proper attribution mentioning "TiFpuzzle for Kids by Iulian-Florin Toma"
 - ✅ Link back to this repository: https://github.com/TiFcode/TiFpuzzle2
 - ✅ State any modifications you made to the original files
 
-See the [https://tifcode.github.io/TiFpuzzle2/NOTICE.html](NOTICE.html) file for complete attribution requirements.
+See the [NOTICE.html](https://tifcode.github.io/TiFpuzzle2/NOTICE.html) file for complete attribution requirements.
