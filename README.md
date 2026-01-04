@@ -43,7 +43,7 @@ A fun and interactive puzzle game for iPhone and iPad
 
 ## Setup
 
-1. Clone the repository (https://github.com/TiFcode/TiFpuzzle2)
+1. Clone the repository [https://github.com/TiFcode/TiFpuzzle2](https://github.com/TiFcode/TiFpuzzle2)
 2. Add your puzzle image to Assets.xcassets with the name "puzzle"
 3. Open TiFpuzzle2.xcodeproj in Xcode
 4. Build and run on simulator or device
@@ -70,7 +70,7 @@ The source code of the project "TiFpuzzle for Kids" located at [https://github.c
 If you use this code in your project, you **MUST**:
 - ✅ Include the [LICENSE.html](https://tifcode.github.io/TiFpuzzle2/LICENSE.html) and [NOTICE.html](https://tifcode.github.io/TiFpuzzle2/NOTICE.html) files in your distribution
 - ✅ Provide proper attribution mentioning "TiFpuzzle for Kids by Iulian-Florin Toma"
-- ✅ Link back to this repository: https://github.com/TiFcode/TiFpuzzle2
+- ✅ Link back to this repository: [https://github.com/TiFcode/TiFpuzzle2](https://github.com/TiFcode/TiFpuzzle2)
 - ✅ State any modifications you made to the original files
 
 See the [NOTICE.html](https://tifcode.github.io/TiFpuzzle2/NOTICE.html) file for complete attribution requirements.
