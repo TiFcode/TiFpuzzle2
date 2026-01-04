@@ -113,6 +113,19 @@ struct ContentView: View {
                                     .cornerRadius(8)
                             }
                         }
+
+                        Button(action: {
+                            if let url = URL(string: "https://github.com/TiFcode/TiFpuzzle2") {
+                                UIApplication.shared.open(url)
+                            }
+                        }) {
+                            Image(systemName: "info.circle")
+                                .font(.title2)
+                                .foregroundColor(.blue)
+                                .padding(8)
+                                .background(Color.blue.opacity(0.1))
+                                .cornerRadius(8)
+                        }
                     }
                     .padding(.horizontal)
                     .padding(.bottom, 8)

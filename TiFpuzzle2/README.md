@@ -2,6 +2,8 @@
 
 A fun and interactive puzzle game for iOS 15.0+ built with SwiftUI.
 
+GitHub URL: https://github.com/TiFcode/TiFpuzzle2
+
 ## Features
 
 - **Switchable grid modes**: 3x3 (default) or 4x4 puzzle grid - tap the title to toggle
@@ -43,7 +45,7 @@ A fun and interactive puzzle game for iOS 15.0+ built with SwiftUI.
 
 ## Setup
 
-1. Clone the repository (https://github.com/TiFcode/TiFpuzzle2)
+1. Clone the repository
 2. Add your puzzle image to Assets.xcassets with the name "puzzle"
 3. Open TiFpuzzle2.xcodeproj in Xcode
 4. Build and run on simulator or device
@@ -59,8 +61,4 @@ A fun and interactive puzzle game for iOS 15.0+ built with SwiftUI.
 
 ## Privacy
 
-For information about how this app handles your data, please see our [Privacy Policy](https://tifcode.github.io/TiFpuzzle2/privacy-policy.html).
-
-## License
-
-The source code of the project "TiFpuzzle for Kids" located at (https://github.com/TiFcode/TiFpuzzle2) is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+For information about how this app handles your data, please see our [Privacy Policy](privacy-policy.html).
