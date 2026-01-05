@@ -400,6 +400,7 @@
 				DEVELOPMENT_TEAM = 86F5D4A9ZA;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.kids-games";
 				INFOPLIST_KEY_NSCameraUsageDescription = "We need access to your camera to take photos for the puzzle game.";
 				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "We need access to your photo library to select photos for the puzzle game.";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
@@ -430,6 +431,7 @@
 				DEVELOPMENT_TEAM = 86F5D4A9ZA;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.kids-games";
 				INFOPLIST_KEY_NSCameraUsageDescription = "We need access to your camera to take photos for the puzzle game.";
 				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "We need access to your photo library to select photos for the puzzle game.";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;

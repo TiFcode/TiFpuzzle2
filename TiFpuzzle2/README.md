@@ -1,4 +1,4 @@
-# TiFpuzzle for Kids
+# TiFpuzzle
 
 A fun and interactive puzzle game for iOS 15.0+ built with SwiftUI.
 

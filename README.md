@@ -1,4 +1,4 @@
-# TiFpuzzle for Kids
+# TiFpuzzle
 
 A fun and interactive puzzle game for iPhone and iPad
 
@@ -63,13 +63,13 @@ For information about how this app handles your data, please see our [Privacy Po
 
 ## License
 
-The source code of the project "TiFpuzzle for Kids" located at [https://github.com/TiFcode/TiFpuzzle2](https://github.com/TiFcode/TiFpuzzle2) is licensed under the Apache License 2.0 - see the [https://tifcode.github.io/TiFpuzzle2/LICENSE.html](LICENSE.html) file for details.
+The source code of the project "TiFpuzzle" located at [https://github.com/TiFcode/TiFpuzzle2](https://github.com/TiFcode/TiFpuzzle2) is licensed under the Apache License 2.0 - see the [https://tifcode.github.io/TiFpuzzle2/LICENSE.html](LICENSE.html) file for details.
 
 ### Attribution Requirements
 
 If you use this code in your project, you **MUST**:
 - ✅ Include the [LICENSE.html](https://tifcode.github.io/TiFpuzzle2/LICENSE.html) and [NOTICE.html](https://tifcode.github.io/TiFpuzzle2/NOTICE.html) files in your distribution
-- ✅ Provide proper attribution mentioning "TiFpuzzle for Kids by Iulian-Florin Toma"
+- ✅ Provide proper attribution mentioning "TiFpuzzle by Iulian-Florin Toma"
 - ✅ Link back to this repository: [https://github.com/TiFcode/TiFpuzzle2](https://github.com/TiFcode/TiFpuzzle2)
 - ✅ State any modifications you made to the original files
 
