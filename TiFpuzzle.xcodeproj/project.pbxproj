@@ -186,7 +186,7 @@
 					};
 				};
 			};
-			buildConfigurationList = 06B8B0772EF0A4960076BA4A /* Build configuration list for PBXProject "TiFpuzzle2" */;
+			buildConfigurationList = 06B8B0772EF0A4960076BA4A /* Build configuration list for PBXProject "TiFpuzzle" */;
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
 			knownRegions = (
@@ -401,8 +401,8 @@
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.kids-games";
-				INFOPLIST_KEY_NSCameraUsageDescription = "We need access to your camera to take photos for the puzzle game.";
-				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "We need access to your photo library to select photos for the puzzle game.";
+				INFOPLIST_KEY_NSCameraUsageDescription = "App needs access to your camera for you to be able to take photos and use them in the puzzle game.";
+				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "App needs access to your photo library for you the be able to select photos for the puzzle game.";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -432,8 +432,8 @@
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.kids-games";
-				INFOPLIST_KEY_NSCameraUsageDescription = "We need access to your camera to take photos for the puzzle game.";
-				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "We need access to your photo library to select photos for the puzzle game.";
+				INFOPLIST_KEY_NSCameraUsageDescription = "App needs access to your camera for you to be able to take photos and use them in the puzzle game.";
+				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "App needs access to your photo library for you the be able to select photos for the puzzle game.";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -527,7 +527,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		06B8B0772EF0A4960076BA4A /* Build configuration list for PBXProject "TiFpuzzle2" */ = {
+		06B8B0772EF0A4960076BA4A /* Build configuration list for PBXProject "TiFpuzzle" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				06B8B09B2EF0A4990076BA4A /* Debug */,
