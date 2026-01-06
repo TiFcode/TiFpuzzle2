@@ -67,7 +67,7 @@ struct ContentView: View {
                             HStack {
                                 Image(systemName: "photo")
                                     .font(.body)
-                                Text("Load photo")
+                                Text("Load")
                                     .font(.body)
                             }
                             .padding(.horizontal, 12)
@@ -77,7 +77,7 @@ struct ContentView: View {
                             .cornerRadius(8)
                         }
 
-                        Text("TiFpuzzle \(gridSize)x\(gridSize)")
+                        Text("TiFpuzzle")
                             .font(.system(.title3, design: .rounded))
                             .fontWeight(.regular)
                             .onTapGesture {
