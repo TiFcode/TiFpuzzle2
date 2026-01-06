@@ -58,20 +58,19 @@ struct ContentView: View {
                             Image(systemName: "camera.fill")
                                 .font(.title2)
                                 .foregroundColor(.blue)
-                                .padding(8)
+                                .padding(6)
                                 .background(Color.blue.opacity(0.1))
                                 .cornerRadius(8)
                         }
 
                         PhotosPicker(selection: $selectedImage, matching: .images) {
-                            HStack {
+                            HStack(spacing: 4) {
                                 Image(systemName: "photo")
-                                    .font(.body)
+                                    .font(.title2)
                                 Text("Load")
                                     .font(.body)
                             }
-                            .padding(.horizontal, 12)
-                            .padding(.vertical, 6)
+                            .padding(6)
                             .background(Color.blue.opacity(0.1))
                             .foregroundColor(.blue)
                             .cornerRadius(8)
@@ -122,7 +121,7 @@ struct ContentView: View {
                             Image(systemName: "questionmark.circle")
                                 .font(.title2)
                                 .foregroundColor(.blue)
-                                .padding(8)
+                                .padding(6)
                                 .background(Color.blue.opacity(0.1))
                                 .cornerRadius(8)
                         }
@@ -135,7 +134,7 @@ struct ContentView: View {
                             Image(systemName: "info.circle")
                                 .font(.title2)
                                 .foregroundColor(.blue)
-                                .padding(8)
+                                .padding(6)
                                 .background(Color.blue.opacity(0.1))
                                 .cornerRadius(8)
                         }
