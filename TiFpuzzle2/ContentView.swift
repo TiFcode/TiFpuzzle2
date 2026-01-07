@@ -147,7 +147,7 @@ struct ContentView: View {
                                 .onAppear {
                                     menuAreaMaxY = menuGeo.frame(in: .global).maxY
                                 }
-                                .onChange(of: menuGeo.frame(in: .global)) { newFrame in
+                                .onChange(of: menuGeo.frame(in: .global)) { _, newFrame in
                                     menuAreaMaxY = newFrame.maxY
                                 }
                         }
@@ -194,7 +194,7 @@ struct ContentView: View {
                                 .onAppear {
                                     gridFrame = gridGeo.frame(in: .global)
                                 }
-                                .onChange(of: gridGeo.frame(in: .global)) { newFrame in
+                                .onChange(of: gridGeo.frame(in: .global)) { _, newFrame in
                                     gridFrame = newFrame
                                 }
                         }
@@ -266,7 +266,7 @@ struct ContentView: View {
                     .onAppear {
                         lowerAreaFrame = lowerGeo.frame(in: .global)
                     }
-                    .onChange(of: lowerGeo.frame(in: .global)) { newFrame in
+                    .onChange(of: lowerGeo.frame(in: .global)) { _, newFrame in
                         lowerAreaFrame = newFrame
                     }
                 }
@@ -275,7 +275,7 @@ struct ContentView: View {
                 initializePuzzle(containerWidth: availableWidth, containerHeight: availableHeight * 0.5)
                 previousSize = geometry.size
             }
-            .onChange(of: geometry.size) { newSize in
+            .onChange(of: geometry.size) { _, newSize in
                 // Check if the aspect ratio changed (orientation change)
                 // Portrait: width < height, Landscape: width > height
                 if previousSize != .zero {
@@ -289,7 +289,7 @@ struct ContentView: View {
                 }
                 previousSize = newSize
             }
-            .onChange(of: selectedImage) { newItem in
+            .onChange(of: selectedImage) { _, newItem in
                 Task {
                     if let data = try? await newItem?.loadTransferable(type: Data.self),
                        let image = UIImage(data: data) {

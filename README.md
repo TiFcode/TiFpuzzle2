@@ -49,6 +49,148 @@ A fun and interactive puzzle game for iPhone and iPad
 4. Build and run on simulator or device
 
 
+## Architecture
+
+### Application Structure
+
+TiFpuzzle is built using SwiftUI with a clean, zone-based layout that separates different functional areas:
+
+#### Main Zones
+
+**Upper Zone - Puzzle Grid Area**
+- Contains the solved puzzle grid where pieces snap into their correct positions
+- Fixed square dimensions calculated as `min(width, height * 0.45) - 32`
+- Grid cells are evenly divided based on grid size (3x3 or 4x4)
+- Displays placed pieces with white borders and no shadow
+- Interactive grid overlay detects secret tap sequence on corners
+- Uses global coordinate frame tracking for accurate drop detection
+
+**Lower Zone - Working Area**
+- Scattered puzzle pieces area where unplaced pieces are randomly distributed
+- Pieces maintain their correct orientation (no rotation)
+- Supports drag gestures with real-time position updates
+- Implements boundary enforcement:
+  - Top boundary: pieces cannot go above the menu bar
+  - Bottom boundary: pieces cannot go below 1cm (37.8 points) from bottom edge
+  - Side boundaries: pieces stay within container width
+- Unplaced pieces have shadow effect for depth perception
+- Z-index management brings dragged pieces to front
+
+**Menu Bar**
+- Fixed height control strip at the top containing:
+  - Camera button (left) - launches device camera
+  - Load button - opens photo picker
+  - Title display - "TiFpuzzle" (tap to toggle grid size)
+  - Auto Solve button (conditional) - appears after secret sequence
+  - Question mark button - opens README documentation
+  - Info button (right) - opens privacy policy
+
+### Core Components
+
+**PuzzlePiece Model**
+```swift
+struct PuzzlePiece: Identifiable {
+    let id: Int              // Unique identifier
+    let row: Int             // Correct row position (0-based)
+    let col: Int             // Correct column position (0-based)
+    var position: CGPoint    // Current position in working area
+    var rotation: Double     // Rotation angle (always 0 in current version)
+    var isPlaced: Bool       // Whether piece is in correct grid position
+    var zIndex: Double       // Layering order for overlapping pieces
+}
+```
+
+**PuzzlePieceView**
+- Renders individual puzzle pieces by cropping the full image
+- Uses offset-based image slicing to show correct portion
+- Applies 2-point white border for piece separation
+- Conditionally applies shadow (only on unplaced pieces)
+- Scales to cell size while maintaining aspect ratio
+
+**ImagePicker (UIViewControllerRepresentable)**
+- Wraps UIKit's UIImagePickerController for SwiftUI integration
+- Supports both camera and photo library sources
+- Handles image selection and dismissal callbacks
+- Triggers puzzle reset with newly selected image
+
+### State Management
+
+The app uses SwiftUI's `@State` property wrappers for reactive state:
+
+**Puzzle State:**
+- `pieces: [PuzzlePiece]` - Array of all puzzle pieces
+- `puzzleCompleted: Bool` - Completion alert trigger
+- `gridSize: Int` - Current grid dimension (3 or 4)
+- `puzzleImage: UIImage?` - Current puzzle image (custom or default)
+
+**Animation State:**
+- `isAutoSolving: Bool` - Auto-solve animation state
+- `animationSpeed: Double` - Duration per piece in auto-solve (1.2s or 0.3s)
+
+**Geometry Tracking:**
+- `gridFrame: CGRect?` - Grid frame geometry tracking (upper grid zone)
+- `lowerAreaFrame: CGRect?` - Lower area geometry tracking (working zone)
+- `menuAreaMaxY: CGFloat` - Menu area geometry tracking (bottom Y coordinate)
+- `previousSize: CGSize` - Geometry size tracking for orientation changes
+
+**Secret Feature State:**
+- `secretTaps: [Int]` - Last 4 grid cell taps for secret sequence
+- `showAutoSolveButton: Bool` - Auto-solve button visibility
+
+**Image Selection State:**
+- `selectedImage: PhotosPickerItem?` - Selected image tracking from photo picker
+- `showPhotoPicker: Bool` - Photo picker presentation state
+- `showCamera: Bool` - Camera presentation state
+
+### Coordinate Space Management
+
+The app uses three coordinate systems:
+
+1. **Global Coordinates** - Absolute screen positions tracked via `GeometryReader.frame(in: .global)`
+2. **Grid Coordinates** - Relative positions within the upper grid zone
+3. **Lower Area Coordinates** - Relative positions within the lower working zone
+
+**Drop Detection Flow:**
+1. Drag gesture provides location in lower area coordinates
+2. Convert to global: `globalY = localY + lowerAreaFrame.minY`
+3. Convert to grid: `gridY = globalY - gridFrame.minY`
+4. Calculate target cell: `targetRow = Int(gridY / cellSize)`
+5. Check correctness: `targetRow == piece.row && targetCol == piece.col`
+6. Calculate snap distance from cell center
+7. If distance ≤ 30 points, snap piece into place
+
+### Boundary Enforcement
+
+**Drag Constraints:**
+- Top: `minY = menuAreaMaxY - lowerAreaFrame.minY + (cellSize / 2)`
+- Bottom: `maxY = lowerAreaFrame.height - 37.8 - (cellSize / 2)`
+- Left: `minX = cellSize / 2`
+- Right: `maxX = containerWidth - (cellSize / 2)`
+
+**Initialization & Shuffle:**
+- Uses same boundary calculations for consistent behavior
+- Random placement within valid ranges
+- Triggered on app launch, photo load, grid size change, and orientation change
+
+### Secret Features
+
+**Auto Solve Unlock Sequence:**
+- 3x3 grid: tap cells [0, 6, 8, 2] (corners: top-left, bottom-left, bottom-right, top-right)
+- 4x4 grid: tap cells [0, 12, 15, 3] (same corner pattern)
+- Toggle button visibility by repeating sequence
+
+**Animation Speed Control:**
+- Default: 1.2 seconds per piece
+- Fast mode: 0.3 seconds per piece (activated by tapping title during auto-solve)
+
+### Orientation Handling
+
+- Monitors `geometry.size` changes via `onChange`
+- Detects portrait ↔ landscape transitions
+- Preserves placed pieces in grid
+- Shuffles unplaced pieces to new random positions within bounds
+- Maintains grid size and completion state
+
 ## Technical Details
 
 - Built with SwiftUI for iOS
@@ -56,6 +198,9 @@ A fun and interactive puzzle game for iPhone and iPad
 - Implements coordinate space conversions for accurate positioning
 - Features smooth animations with spring physics
 - Supports dynamic layout with GeometryReader
+- UIViewControllerRepresentable for camera integration
+- PhotosPicker for modern photo library access
+- Task-based async image loading
 
 ## Privacy
 
