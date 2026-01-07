@@ -26,22 +26,6 @@ import SwiftUI
 import PhotosUI
 
 // ============================================================================
-// Data Models
-// ============================================================================
-
-/// Core Component: PuzzlePiece Model
-/// Represents a single puzzle piece with its position and state
-struct PuzzlePiece: Identifiable {
-    let id: Int              // Unique identifier
-    let row: Int             // Correct row position (0-based)
-    let col: Int             // Correct column position (0-based)
-    var position: CGPoint    // Current position in working area
-    var rotation: Double     // Rotation angle (always 0 in current version)
-    var isPlaced: Bool = false  // Whether piece is in correct grid position
-    var zIndex: Double = 0   // Layering order for overlapping pieces
-}
-
-// ============================================================================
 // Main View
 // ============================================================================
 
@@ -582,98 +566,6 @@ struct ContentView: View {
         }
 
         solvePiece(at: 0)
-    }
-}
-
-// ============================================================================
-// Supporting Views
-// ============================================================================
-
-/// PuzzlePieceView - Renders individual puzzle pieces by cropping the full image.
-/// Uses offset-based image slicing, applies white border, and shadow for unplaced pieces.
-struct PuzzlePieceView: View {
-    let piece: PuzzlePiece
-    let cellSize: CGFloat
-    let gridSize: Int
-    let image: UIImage?
-
-    var body: some View {
-        GeometryReader { geometry in
-            let totalSize = cellSize * CGFloat(gridSize)
-
-            Group {
-                if let uiImage = image {
-                    Image(uiImage: uiImage)  // Custom image from camera or photo picker
-                        .resizable()
-                        .scaledToFill()
-                        .frame(width: totalSize, height: totalSize)
-                        .clipped()
-                        .offset(
-                            x: -CGFloat(piece.col) * cellSize,
-                            y: -CGFloat(piece.row) * cellSize
-                        )
-                } else {
-                    Image(AppConstants.defaultPuzzleImageName)  // Default puzzle image from assets
-                        .resizable()
-                        .scaledToFill()
-                        .frame(width: totalSize, height: totalSize)
-                        .clipped()
-                        .offset(
-                            x: -CGFloat(piece.col) * cellSize,
-                            y: -CGFloat(piece.row) * cellSize
-                        )
-                }
-            }
-        }
-        .frame(width: cellSize, height: cellSize)
-        .clipped()
-        .overlay(
-            Rectangle()
-                .strokeBorder(Color.white, lineWidth: AppConstants.pieceBorderWidth)
-        )
-        .shadow(radius: piece.isPlaced ? 0 : AppConstants.pieceShadowRadius)
-    }
-}
-
-/// ImagePicker - Wraps UIKit's UIImagePickerController for SwiftUI integration.
-/// Supports camera and photo library sources. Triggers puzzle reset with newly selected image.
-struct ImagePicker: UIViewControllerRepresentable {
-    @Binding var image: UIImage?
-    @Environment(\.presentationMode) var presentationMode
-    var sourceType: UIImagePickerController.SourceType
-    var onImagePicked: (UIImage?) -> Void
-
-    func makeUIViewController(context: Context) -> UIImagePickerController {
-        let picker = UIImagePickerController()
-        picker.sourceType = sourceType
-        picker.delegate = context.coordinator
-        return picker
-    }
-
-    func updateUIViewController(_ uiViewController: UIImagePickerController, context: Context) {}
-
-    func makeCoordinator() -> Coordinator {
-        Coordinator(self)
-    }
-
-    class Coordinator: NSObject, UINavigationControllerDelegate, UIImagePickerControllerDelegate {
-        let parent: ImagePicker
-
-        init(_ parent: ImagePicker) {
-            self.parent = parent
-        }
-
-        func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey: Any]) {
-            if let uiImage = info[.originalImage] as? UIImage {
-                parent.image = uiImage
-                parent.onImagePicked(uiImage)
-            }
-            parent.presentationMode.wrappedValue.dismiss()
-        }
-
-        func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
-            parent.presentationMode.wrappedValue.dismiss()
-        }
     }
 }
 
