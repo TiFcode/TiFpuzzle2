@@ -8,6 +8,8 @@
 import Foundation
 import CoreGraphics
 
+// MARK: - Puzzle Piece Model
+
 /// Core Component: PuzzlePiece Model
 /// Represents a single puzzle piece with its position and state
 struct PuzzlePiece: Identifiable {

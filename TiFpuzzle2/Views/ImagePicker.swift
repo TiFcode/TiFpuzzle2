@@ -8,6 +8,8 @@
 import SwiftUI
 import UIKit
 
+// MARK: - Image Picker
+
 /// ImagePicker - Wraps UIKit's UIImagePickerController for SwiftUI integration.
 /// Supports camera and photo library sources. Triggers puzzle reset with newly selected image.
 struct ImagePicker: UIViewControllerRepresentable {

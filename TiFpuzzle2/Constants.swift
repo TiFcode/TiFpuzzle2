@@ -13,11 +13,11 @@
 import Foundation
 import CoreGraphics
 
+// MARK: - App Constants
+
 struct AppConstants {
 
-    // ========================================================================
-    // URLs
-    // ========================================================================
+    // MARK: URLs
 
     /// README documentation URL
     static let readmeURL = "https://tifcode.github.io/TiFpuzzle2"
@@ -25,9 +25,7 @@ struct AppConstants {
     /// Privacy policy URL
     static let privacyPolicyURL = "https://tifcode.github.io/TiFpuzzle2/privacy-policy.html"
 
-    // ========================================================================
-    // Grid Configuration
-    // ========================================================================
+    // MARK: Grid Configuration
 
     /// Default grid size on app launch
     static let defaultGridSize = 3
@@ -38,9 +36,7 @@ struct AppConstants {
     /// Maximum grid size (4x4)
     static let maxGridSize = 4
 
-    // ========================================================================
-    // Layout Dimensions
-    // ========================================================================
+    // MARK: Layout Dimensions
 
     /// Grid height multiplier relative to screen height (45% of screen height)
     static let gridHeightMultiplier: CGFloat = 0.45
@@ -54,25 +50,19 @@ struct AppConstants {
     /// Lower area height multiplier relative to screen height (50% of screen height)
     static let lowerAreaHeightMultiplier: CGFloat = 0.5
 
-    // ========================================================================
-    // Boundary Enforcement
-    // ========================================================================
+    // MARK: Boundary Enforcement
 
     /// Bottom margin in points (1 cm ≈ 37.8 points at standard DPI)
     /// Pieces cannot be dragged below this margin from the bottom edge
     static let bottomMargin: CGFloat = 37.8
 
-    // ========================================================================
-    // Snap Behavior
-    // ========================================================================
+    // MARK: Snap Behavior
 
     /// Distance threshold in points for snapping pieces to grid cells
     /// Pieces within this distance from cell center will snap into place
     static let snapThreshold: CGFloat = 30.0
 
-    // ========================================================================
-    // Animation
-    // ========================================================================
+    // MARK: Animation
 
     /// Default animation speed in seconds per piece for auto-solve
     static let defaultAnimationSpeed: Double = 1.2
@@ -89,9 +79,7 @@ struct AppConstants {
     /// Delay in seconds before showing puzzle completion alert
     static let completionAlertDelay: Double = 0.5
 
-    // ========================================================================
-    // Visual Styling
-    // ========================================================================
+    // MARK: Visual Styling
 
     /// Puzzle piece border width in points
     static let pieceBorderWidth: CGFloat = 2
@@ -126,9 +114,7 @@ struct AppConstants {
     /// Auto solve button vertical padding
     static let autoSolveButtonVerticalPadding: CGFloat = 8
 
-    // ========================================================================
-    // Secret Features
-    // ========================================================================
+    // MARK: Secret Features
 
     /// Secret tap sequence for 3x3 grid (corners: top-left, bottom-left, bottom-right, top-right)
     static let secretSequence3x3 = [0, 6, 8, 2]
@@ -139,16 +125,12 @@ struct AppConstants {
     /// Number of taps to track for secret sequence detection
     static let secretSequenceLength = 4
 
-    // ========================================================================
-    // Assets
-    // ========================================================================
+    // MARK: Assets
 
     /// Default puzzle image name in Assets.xcassets
     static let defaultPuzzleImageName = "puzzle"
 
-    // ========================================================================
-    // UI Spacing
-    // ========================================================================
+    // MARK: UI Spacing
 
     /// Vertical spacing between upper and lower zones
     static let zoneSpacing: CGFloat = 16

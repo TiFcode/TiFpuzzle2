@@ -7,6 +7,8 @@
 
 import SwiftUI
 
+// MARK: - Puzzle Piece View
+
 /// PuzzlePieceView - Renders individual puzzle pieces by cropping the full image.
 /// Uses offset-based image slicing, applies white border, and shadow for unplaced pieces.
 struct PuzzlePieceView: View {
