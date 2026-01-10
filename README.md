@@ -49,13 +49,65 @@ A fun and interactive puzzle game for iPhone and iPad
 4. Build and run on simulator or device
 
 
-## Architecture
+## Technical Details
+
+### Design Pattern: MVVM (Model-View-ViewModel)
+
+The app follows a strict separation of concerns:
+
+```
+┌─────────────────────────────────────────┐
+│ Models/                                  │
+│ - PuzzlePiece.swift (Data model)        │
+└─────────────────────────────────────────┘
+                   ↓
+┌─────────────────────────────────────────┐
+│ ViewModels/                              │
+│ - PuzzleViewModel.swift (Business logic) │
+└─────────────────────────────────────────┘
+                   ↓
+┌─────────────────────────────────────────┐
+│ Views/                                   │
+│ - ContentView.swift (Coordinator)        │
+│ - MenuBarView.swift                      │
+│ - PuzzleGridView.swift                   │
+│ - WorkingAreaView.swift                  │
+│ - PuzzlePieceView.swift                  │
+│ - ImagePicker.swift                      │
+└─────────────────────────────────────────┘
+                   ↓
+┌─────────────────────────────────────────┐
+│ Constants.swift (Configuration)          │
+└─────────────────────────────────────────┘
+```
 
 ### Application Structure
 
 TiFpuzzle is built using SwiftUI with a clean, zone-based layout that separates different functional areas:
+### Zone-Based Layout
 
-#### Main Zones
+The UI is divided into three main zones:
+
+1. **Menu Bar** (Top)
+   - Camera button
+   - Photo picker button
+   - Title (tap to toggle grid size)
+   - Auto-solve button (conditional)
+   - Help/Privacy buttons
+
+2. **Upper Zone - Puzzle Grid Area**
+   - Fixed-size grid where pieces snap into correct positions
+   - Tap detection for secret sequence
+   - White background with shadow
+
+3. **Lower Zone - Working Area**
+   - Randomly scattered puzzle pieces (initial placement)
+   - All pieces are draggable within boundaries
+   - Pieces can be dragged up to the grid and dropped
+   - Boundary enforcement (top: menu bar, bottom: 1cm margin)
+
+
+#### Details For Each Zone
 
 **Upper Zone - Puzzle Grid Area**
 - Contains the solved puzzle grid where pieces snap into their correct positions
