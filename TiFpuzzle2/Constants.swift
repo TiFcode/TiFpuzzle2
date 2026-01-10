@@ -60,7 +60,7 @@ struct AppConstants {
 
     /// Distance threshold in points for snapping pieces to grid cells
     /// Pieces within this distance from cell center will snap into place
-    static let snapThreshold: CGFloat = 30.0
+    static let snapThreshold: CGFloat = 60.0
 
     // MARK: Animation
 
