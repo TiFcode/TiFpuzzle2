@@ -165,7 +165,7 @@ struct ContentView: View {
             } message: {
                 Text("Great job! You solved the puzzle!")
             }
-            .sheet(isPresented: $viewModel.showCamera) {
+            .fullScreenCover(isPresented: $viewModel.showCamera) {
                 ImagePicker(image: $viewModel.puzzleImage, sourceType: .camera) { image in
                     if image != nil {
                         viewModel.resetPuzzle(
@@ -174,6 +174,7 @@ struct ContentView: View {
                         )
                     }
                 }
+                .ignoresSafeArea()
             }
         }
     }

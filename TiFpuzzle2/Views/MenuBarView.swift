@@ -56,7 +56,10 @@ struct MenuBarView: View {
             // Title display - "TiFpuzzle" (tap to toggle grid size or speed up auto-solve)
             Text("TiFpuzzle")
                 .font(.system(.title3, design: .rounded))
-                .fontWeight(.regular)
+                .foregroundColor(.blue)
+                .padding(AppConstants.buttonPadding)
+                .background(Color.blue.opacity(AppConstants.buttonBackgroundOpacity))
+                .cornerRadius(AppConstants.buttonCornerRadius)
                 .onTapGesture {
                     if isAutoSolving {
                         animationSpeed = AppConstants.fastAnimationSpeed
