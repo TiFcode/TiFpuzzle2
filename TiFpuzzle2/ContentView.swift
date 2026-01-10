@@ -41,7 +41,7 @@ struct ContentView: View {
             VStack(spacing: AppConstants.zoneSpacing) {
 
                 // ====================================================================
-                // Upper Zone - Puzzle Grid Area
+                // MARK: - Upper Zone - Menu and Puzzle Grid Area
                 // ====================================================================
 
                 VStack(spacing: 0) {
@@ -98,7 +98,7 @@ struct ContentView: View {
                 .padding()
 
                 // ====================================================================
-                // Lower Zone - Working Area
+                // MARK: - Lower Zone - Working Area
                 // ====================================================================
                 // Scattered puzzle pieces area where unplaced pieces are randomly distributed.
 
