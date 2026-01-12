@@ -6,6 +6,10 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		06BB3E442F159BB300ACF496 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 06BB3E432F159BB300ACF496 /* LaunchScreen.storyboard */; };
+/* End PBXBuildFile section */
+
 /* Begin PBXContainerItemProxy section */
 		06B8B08A2EF0A4990076BA4A /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -24,9 +28,10 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		06B8B07C2EF0A4960076BA4A /* TiFpuzzle2.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TiFpuzzle2.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		06B8B07C2EF0A4960076BA4A /* TiFpuzzle.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TiFpuzzle.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		06B8B0892EF0A4990076BA4A /* TiFpuzzle2Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = TiFpuzzle2Tests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		06B8B0932EF0A4990076BA4A /* TiFpuzzle2UITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = TiFpuzzle2UITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		06BB3E432F159BB300ACF496 /* LaunchScreen.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = LaunchScreen.storyboard; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
@@ -75,6 +80,7 @@
 		06B8B0732EF0A4960076BA4A = {
 			isa = PBXGroup;
 			children = (
+				06BB3E432F159BB300ACF496 /* LaunchScreen.storyboard */,
 				06B8B07E2EF0A4960076BA4A /* TiFpuzzle2 */,
 				06B8B08C2EF0A4990076BA4A /* TiFpuzzle2Tests */,
 				06B8B0962EF0A4990076BA4A /* TiFpuzzle2UITests */,
@@ -85,7 +91,7 @@
 		06B8B07D2EF0A4960076BA4A /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				06B8B07C2EF0A4960076BA4A /* TiFpuzzle2.app */,
+				06B8B07C2EF0A4960076BA4A /* TiFpuzzle.app */,
 				06B8B0892EF0A4990076BA4A /* TiFpuzzle2Tests.xctest */,
 				06B8B0932EF0A4990076BA4A /* TiFpuzzle2UITests.xctest */,
 			);
@@ -114,7 +120,7 @@
 			packageProductDependencies = (
 			);
 			productName = TiFpuzzle2;
-			productReference = 06B8B07C2EF0A4960076BA4A /* TiFpuzzle2.app */;
+			productReference = 06B8B07C2EF0A4960076BA4A /* TiFpuzzle.app */;
 			productType = "com.apple.product-type.application";
 		};
 		06B8B0882EF0A4990076BA4A /* TiFpuzzle2Tests */ = {
@@ -212,6 +218,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				06BB3E442F159BB300ACF496 /* LaunchScreen.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -406,6 +413,7 @@
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -414,7 +422,7 @@
 				);
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = tif.ro.TiFpuzzle2;
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = TiFpuzzle;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -437,6 +445,7 @@
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -445,7 +454,7 @@
 				);
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = tif.ro.TiFpuzzle2;
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = TiFpuzzle;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
