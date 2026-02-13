@@ -37,9 +37,9 @@ A fun and interactive puzzle game for iPhone and iPad
 
 ## Requirements
 
-- iOS 15.0+
-- Xcode 13.0+
-- Swift 5.5+
+- iOS 17.5+
+- Xcode 15.0+
+- Swift 5.9+
 
 ## Setup
 
@@ -209,7 +209,7 @@ The app uses three coordinate systems:
 4. Calculate target cell: `targetRow = Int(gridY / cellSize)`
 5. Check correctness: `targetRow == piece.row && targetCol == piece.col`
 6. Calculate snap distance from cell center
-7. If distance ≤ 30 points, snap piece into place
+7. If distance ≤ 60 points, snap piece into place
 
 ### Boundary Enforcement
 
